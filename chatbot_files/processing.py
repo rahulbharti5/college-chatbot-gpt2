@@ -1,6 +1,6 @@
 from datasets import load_dataset
 from tqdm.auto import tqdm
-
+import math
 
 class Processing:
     def __init__(self, tokenizer, train_frac):
@@ -164,6 +164,30 @@ class Processing:
 
         return train_dialogues, valid_dialogues
     
+    # Corpus Data Prcessing
+    def _college_corpus(self):
+        lines = []  # Array to store lines
+        file_path = "row_data/corpus_data/college_corpus_train.txt"
+        try:
+            with open(file_path, 'r') as file:  # Open the file in read mode
+                for line in file:
+                    token_list = self.tokenizer.tokenize(line.strip().replace('’', '\''))
+                    token_list = self._process_token_list(token_list)  # Process the token list
+                    text = self.tokenizer.convert_tokens_to_string(token_list)
+                    lines.append(text)
+                # lines = file.readlines()  # Read all lines and store them in the list
+        except FileNotFoundError:
+            print(f"File {file_path} not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+        finally:
+        # File object will be closed automatically because of 'with' statement
+            del file  # Deleting the file object to free memory
+        split_index = math.floor(len(lines) * self.train_frac)
+        train_lines = lines[:split_index]
+        val_lines = lines[split_index:]
+    
+        return train_lines, val_lines  # Return the two arrays
 
     @staticmethod
     def _process_token_list(token_list):

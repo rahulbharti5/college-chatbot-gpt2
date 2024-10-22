@@ -68,8 +68,77 @@ class Dialogues(Processing):
             return self._load_blended()
         elif dataset == 'college_dataset':
             return self._load_college()
+
+class Corpus(Processing):
+    def __init__(self, tokenizer, args):
+        self.tokenizer = tokenizer
+        self.args = args
+        self.dataset_list = ['college_corpus']
+        super().__init__(tokenizer, args['train_frac'])
+
+    def load(self):
+        # loading all datasets
+        train_dataset, valid_dataset = self._college_corpus() ## Have to Modify
+        return train_dataset, valid_dataset
+
+    def save(self, prefix, tokenizer, lines):
+        print(f'Saving {prefix} Corpus to file...')
+        if not os.path.isdir(self.args["corpus_dataset_dir"]):
+            os.makedirs(self.args["corpus_dataset_dir"])
+
+        lines_path = f'{self.args["corpus_dataset_dir"]}/{prefix}_corpus.pickle'
+        ids_path = f'{self.args["corpus_dataset_dir"]}/{prefix}_ids.pickle'
         
-     
+        with open(lines_path, 'wb') as f:
+            pickle.dump(lines, f)   
+        
+        print(f'Saving {prefix} ids to file...')
+        ids = [] 
+        for utter in tqdm(lines):
+            tokens = tokenizer.tokenize(utter)
+            token_ids = tokenizer.encode(tokens)
+            ids.append(token_ids)
+
+        with open(ids_path, 'wb') as f:
+            pickle.dump(ids, f)
+
+        print('Saving complete!')
+
+class CorpusDataSet(Dataset):
+    def __init__(self, prefix, args):
+        self.input_ids = []
+        self.labels = []
+        self.pad_token_id = args.get('pad_token_id', 0)  # Default padding token ID
+        self.max_length = args['max_length']  # Maximum length for truncation/padding
+        
+        # Load the tokenized data from pickle and prepare input_ids and labels
+        self._prepare_data(prefix, args)
+    
+    def _prepare_data(self, prefix, args):
+        # Load pre-tokenized data from the pickle file
+        with open(f'{args["structure_dataset_dir"]}/{prefix}_ids.pickle', 'rb') as f:
+            dials = pickle.load(f)  # Load the tokenized data
+        
+        # Process each dialogue (or sequence of token IDs)
+        for token_ids in dials:
+            # Ensure each sequence is truncated/padded to max_length
+            input_ids = token_ids[:self.max_length]  # Truncate to max_length
+            input_ids += [self.pad_token_id] * (self.max_length - len(input_ids))  # Pad to max_length
+
+            # Create labels by shifting the input_ids
+            labels = input_ids[1:] + [self.pad_token_id]  # Shift input_ids to create labels
+
+            # Store input_ids and labels directly as lists
+            self.input_ids.append(input_ids)
+            self.labels.append(labels)
+
+    def __len__(self):
+        return len(self.input_ids)
+
+    def __getitem__(self, idx):
+        # Return input_ids and labels as lists
+        return self.input_ids[idx], self.labels[idx]
+
 class DialoguesDataset(Dataset):
     def __init__(self, prefix, args):
         self.input_ids = []
