@@ -175,16 +175,23 @@ class CorpusDataSet(Dataset):
         
         # Process each dialogue (or sequence of token IDs)
         for token_ids in dials:
-            # Ensure each sequence is truncated/padded to max_length
-            input_ids = token_ids[:self.max_length]  # Truncate to max_length
-            input_ids += [self.pad_token_id] * (self.max_length - len(input_ids))  # Pad to max_length
+            # Split token_ids into chunks of max_length
+            for i in range(0, len(token_ids), self.max_length):
+            # Get a chunk of token_ids
+                input_ids = token_ids[i:i + self.max_length]
+        
+                # If the chunk is smaller than max_length, pad it
+                # if len(input_ids) < self.max_length:
+                # #    input_ids += [self.pad_token_id] * (self.max_length - len(input_ids))
+                #    input_ids += [self.pad_token_id]
 
-            # Create labels by shifting the input_ids
-            labels = input_ids[1:] + [self.pad_token_id]  # Shift input_ids to create labels
+                # Create labels by shifting the input_ids
+                labels = input_ids[1:] + [self.pad_token_id]  # Shift input_ids to create labels
 
-            # Store input_ids and labels directly as lists
-            self.input_ids.append(input_ids)
-            self.labels.append(labels)
+                # Store input_ids and labels directly as lists
+                self.input_ids.append(input_ids)
+                self.labels.append(labels)
+
 
     def __len__(self):
         return len(self.input_ids)
