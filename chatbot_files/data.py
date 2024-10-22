@@ -4,7 +4,7 @@ from itertools import chain
 from tqdm.auto import tqdm
 from torch.utils.data import Dataset
 
-from processing import Processing
+from chatbot_files.processing import Processing
 
 
 class Dialogues(Processing):
@@ -33,11 +33,11 @@ class Dialogues(Processing):
     def save(self, prefix, tokenizer, dialogues):
         print(f'Saving {prefix} dialogues to file...')
 
-        if not os.path.isdir(self.args["dataset_dir"]):
-            os.makedirs(self.args["dataset_dir"])
+        if not os.path.isdir(self.args["structure_dataset_dir"]):
+            os.makedirs(self.args["structure_dataset_dir"])
 
-        dialogues_path = f'{self.args["dataset_dir"]}/{prefix}_dialogues.pickle'
-        ids_path = f'{self.args["dataset_dir"]}/{prefix}_ids.pickle'
+        dialogues_path = f'{self.args["structure_dataset_dir"]}/{prefix}_dialogues.pickle'
+        ids_path = f'{self.args["structure_dataset_dir"]}/{prefix}_ids.pickle'
 
         with open(dialogues_path, 'wb') as f:
             pickle.dump(dialogues, f)
@@ -69,8 +69,7 @@ class Dialogues(Processing):
         elif dataset == 'college_dataset':
             return self._load_college()
         
-
-        
+     
 class DialoguesDataset(Dataset):
     def __init__(self, prefix, args):
         self.input_ids = []
@@ -85,7 +84,7 @@ class DialoguesDataset(Dataset):
         return self.input_ids[idx], self.token_type_ids[idx], self.labels[idx]
 
     def _prepare_data(self, prefix, args):
-        with open(f'{args["dataset_dir"]}/{prefix}_ids.pickle', 'rb') as f: # trin_ids.pickle and valid_ids.pickle
+        with open(f'{args["structure_dataset_dir"]}/{prefix}_ids.pickle', 'rb') as f: # trin_ids.pickle and valid_ids.pickle
             dials = pickle.load(f)
 
         for dial in tqdm(dials):

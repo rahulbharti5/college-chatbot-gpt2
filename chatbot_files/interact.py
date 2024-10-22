@@ -4,7 +4,7 @@ from itertools import chain
 import torch
 import torch.nn.functional as F
 
-from utils import top_k_filter, lemma_sentence
+from chatbot_files.utils import top_k_filter, lemma_sentence
 
 
 class Chatbot:

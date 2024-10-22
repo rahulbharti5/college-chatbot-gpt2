@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader
 from torch.optim import AdamW
 from transformers import get_polynomial_decay_schedule_with_warmup
 
-from data import DialoguesDataset
-from utils import PadCollate
+from chatbot_files.data import DialoguesDataset
+from chatbot_files.utils import PadCollate
 
 
 class Trainer:

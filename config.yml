@@ -1,4 +1,5 @@
-dataset_dir: "../data" # name of the directory where files are stored
+structure_dataset_dir: "./process_data/structred_data" # name of the directory where structred data files are stored
+corpus_dataset_dir : "./process_data/corpus_data" # name of the directory where corpus data files are stored
 train_frac: 0.85 # ratio of the conversations to be included in the train set
 model_name: "gpt2" # name of the model for tokenizer and transformer
 seed: 8459 # random seed
@@ -8,11 +9,12 @@ batch_size: 1 # batch size
 num_epochs: 10 # number of total epochs
 max_len: 100 # maximum length of input sequence
 max_history: 5 # maximum number of dialogue histories to include
-models_dir: "../models" # directory name for saved checkpoints
+models_dir: "./models" # directory name for saved checkpoints
 stop_command: "bye" # command to stop the conversation when inferencing
 top_p: 0.9 # top p
 top_k: 50 # top k
 temperature: 0.9 # randomness of predictions
 mode: 'train'
-checkpoint : "../models/model_best_4.5401.h5"
-model_dir: "../models" # directory name for saved checkpoints
+checkpoint : None
+model_dir: "./models" # directory name for saved checkpoints
+# dataset_corpus: "./process_data/courpus_data"

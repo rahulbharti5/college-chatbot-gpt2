@@ -146,7 +146,7 @@ class Processing:
         return train_dialogues, valid_dialogues
     
     def _load_college(self):
-        from website_data import about_college,about_it_department,about_ee_department,about_ce_department,placement_overview,hostel,co_curricular
+        from chatbot_files.website_data import about_college,about_it_department,about_ee_department,about_ce_department,placement_overview,hostel,co_curricular
         all_dialogues = about_college+about_it_department+about_ee_department+about_ce_department+placement_overview+hostel+co_curricular
       
         for i, dialogue in enumerate(tqdm(all_dialogues)):
