@@ -6,7 +6,6 @@ import torch.nn.functional as F
 
 from chatbot_files.utils import top_k_filter, lemma_sentence
 
-
 class Chatbot:
     def __init__(self, model, tokenizer, args):
         self.model = model

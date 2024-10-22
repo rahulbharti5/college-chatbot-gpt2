@@ -26,6 +26,24 @@ class PadCollate:
         labels = pad_sequence(labels, batch_first=True, padding_value=-100)
 
         return input_ids, token_type_ids, labels
+    
+class PadCollateCorpus:
+    def __init__(self, args):
+        self.args = args
+
+    def __call__(self, batch):
+        eos_id = self.args['eos_id']
+        input_ids, labels = [], []
+
+        for idx, seqs in enumerate(batch):
+            input_ids.append(torch.LongTensor(seqs[0]))
+            labels.append(torch.LongTensor(seqs[1]))
+
+        input_ids = pad_sequence(input_ids, batch_first=True, padding_value=eos_id)
+        labels = pad_sequence(labels, batch_first=True, padding_value=-100)
+
+        return input_ids, labels
+
 
 
 def set_seed(seed):
