@@ -5,7 +5,7 @@ model_name: "gpt2" # name of the model for tokenizer and transformer
 seed: 8459 # random seed
 lr: 0.00002 # learning rate
 warmup_ratio: 0.1 # ratio of warmup steps to the total training steps
-batch_size: 1 # batch size
+batch_size: 8 # batch size
 num_epochs: 10 # number of total epochs
 max_len: 100 # maximum length of input sequence
 max_history: 5 # maximum number of dialogue histories to include

@@ -162,8 +162,8 @@ class CorpusDataSet(Dataset):
         self.input_ids = []
         self.labels = []
         self.pad_token_id = args.get('eos_id', 0)  # Default padding token ID args['eos_id']
-        self.max_length = args['max_len']  # Maximum length for truncation/padding
-        # self.max_length = 768
+        # self.max_length = args['max_len']  # Maximum length for truncation/padding
+        self.max_length = 768
         
         # Load the tokenized data from pickle and prepare input_ids and labels
         self._prepare_data(prefix, args)
