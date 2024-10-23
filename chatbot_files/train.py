@@ -171,7 +171,8 @@ class Trainer:
 class Corpus_Trainer:
     def __init__(self, model, args):
         print('Loading the optimizer...')
-        self.optimizer = AdamW(model.parameters(), lr=args['lr'])
+        # self.optimizer = AdamW(model.parameters(), lr=args['lr']) TODO: add this parameter in config file
+        self.optimizer = AdamW(model.parameters(), lr=5e-5)
         self.best_loss = 1e+10
         self.last_epoch = 0
 
@@ -225,13 +226,11 @@ class Corpus_Trainer:
             train_perplexity = []
 
             for i, batch in enumerate(tqdm(self.train_loader)):
-                input_ids, labels = batch
+                input_ids = batch
                 input_ids = input_ids.to(self.args['device'])
-                labels = labels.to(self.args['device'])
-
+               
                 outputs = self.model(
                     input_ids=input_ids,
-                    labels=labels
                 )
 
                 loss, logits = outputs[0], outputs[1]

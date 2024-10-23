@@ -160,7 +160,7 @@ class Corpus(Processing):
 class CorpusDataSet(Dataset):
     def __init__(self, prefix, args):
         self.input_ids = []
-        self.labels = []
+        # self.labels = []
         self.pad_token_id = args.get('eos_id', 0)  # Default padding token ID args['eos_id']
         # self.max_length = args['max_len']  # Maximum length for truncation/padding
         self.max_length = 768
@@ -186,11 +186,11 @@ class CorpusDataSet(Dataset):
                 #    input_ids += [self.pad_token_id]
 
                 # Create labels by shifting the input_ids
-                labels = input_ids[1:] + [self.pad_token_id]  # Shift input_ids to create labels
+                # labels = input_ids[1:] + [self.pad_token_id]  # Shift input_ids to create labels
 
                 # Store input_ids and labels directly as lists
                 self.input_ids.append(input_ids)
-                self.labels.append(labels)
+                # self.labels.append(labels)
 
 
     def __len__(self):
